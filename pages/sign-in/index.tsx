@@ -1,16 +1,20 @@
-import { FC, useState, useCallback } from 'react'
+import { FC, useState, useCallback, useEffect, FormEvent } from 'react'
 import Container from '@/components/common/Container'
 import styles from '@/styles/signin.module.css'
 import { RiLockPasswordLine } from 'react-icons/ri'
 import Validation, { FormProps } from '@/helpers/validation'
 import FormGroup from '@/components/common/FormGroup'
+import { AuthProvider, useAuth } from '@/hooks/useAuth'
 
 const SignIn: FC = () => {
+
+    const { user, saveUser } = useAuth()
 
     const [validation, setValidation] = useState<Validation>()
 
     const [email, setEmail] = useState<FormProps<string>>({ value: '', errorMessage: '' })
     const [password, setPassword] = useState<FormProps<string>>({ value: '', errorMessage: '' })
+    const [showAlert, setShowAlert] = useState(false)
 
     const [disabled, setDisabled] = useState(true)
 
@@ -26,11 +30,25 @@ const SignIn: FC = () => {
         })
     }, [])
 
+    const onSubmit = (e: FormEvent<HTMLFormElement>) => {
+        e.preventDefault()
+        const result = saveUser!({ email: email.value, password: password.value })
+        if (!result) {
+            setShowAlert(true)
+        } else {
+            setShowAlert(false)
+        }
+    }
 
     return <Container>
         <main className='d-flex justify-content-center align-items-center py-5 bg-white bg-body rounded shadow-lg flex-column'>
             <h1 className='mb-3'>Sign in to the Auction</h1>
-            <form ref={form} className={styles.form}>
+            <form ref={form} className={styles.form} onSubmit={onSubmit}>
+                {showAlert && (
+                    <div className="alert alert-danger" role="alert">
+                        We couldnt find this user.
+                    </div>
+                )}
                 {validation && (
                     <>
                         <FormGroup errorMessage={email.errorMessage} isRequired={true}>

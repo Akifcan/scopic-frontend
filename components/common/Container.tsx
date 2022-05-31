@@ -8,14 +8,14 @@ interface ContainerProps {
 
 const Container: FC<ContainerProps> = ({ children }) => {
 
-    return <AuthProvider>
+    return <>
         <Header />
         <div className='body py-2'>
             <div className='container'>
                 {children}
             </div>
         </div>
-    </AuthProvider>
+    </>
 }
 
 export default Container

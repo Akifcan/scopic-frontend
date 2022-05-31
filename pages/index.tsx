@@ -7,6 +7,7 @@ const Home: FC = () => {
 
   const [currentPage, setCurrentPage] = useState(6)
 
+
   return <Container>
     <ProductCard /> <br />
     <Pagination currentPage={currentPage} onPageChange={(page) => setCurrentPage(page)} max={5} totalPage={50} />

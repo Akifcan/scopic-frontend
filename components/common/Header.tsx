@@ -1,16 +1,11 @@
 import { FC, useEffect } from 'react'
 import Link from 'next/link'
 import { useAuth } from '@/hooks/useAuth'
+import Avatar from './Avatar'
 
 const Header: FC = () => {
 
-    const { user } = useAuth()
-
-    useEffect(() => {
-        console.log(user);
-    }, [user])
-
-
+    const { user, logout } = useAuth()
 
     return <nav className="navbar navbar-expand-lg navbar-light bg-light container">
         <div className="container-fluid">
@@ -35,13 +30,28 @@ const Header: FC = () => {
                         </Link>
                     )}
                     {user && (
-                        <Link passHref={true} href='/settings'>
-                            <li className="nav-item">
-                                <a className="nav-link" href="#">My Settings</a>
-                            </li>
-                        </Link>
+                        <>
+                            <Link passHref={true} href='/settings'>
+                                <li className="nav-item">
+                                    <a className="nav-link" href="#">My Settings</a>
+                                </li>
+                            </Link>
+                        </>
                     )}
                 </ul>
+                {user && (
+                    <ul className='navbar-nav  mb-2 mb-lg-0 d-flex align-items-center'>
+                        <li className="nav-item">
+                            <a className="nav-link text-capitalize d-flex align-items-center" href="#">
+                                <Avatar src={user.avatarSrc} alt={`Profile photo of ${user.name}`} /> {user.name}
+                            </a>
+                        </li>
+                        <li className="nav-item" onClick={() => logout!()}>
+                            <a className="nav-link" href="#">Sign out</a>
+                        </li>
+
+                    </ul>
+                )}
             </div>
         </div>
     </nav>
