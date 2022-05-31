@@ -1,7 +1,17 @@
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
 import Link from 'next/link'
+import { useAuth } from '@/hooks/useAuth'
 
 const Header: FC = () => {
+
+    const { user } = useAuth()
+
+    useEffect(() => {
+        console.log(user);
+    }, [user])
+
+
+
     return <nav className="navbar navbar-expand-lg navbar-light bg-light container">
         <div className="container-fluid">
             <Link passHref={true} href='/'>
@@ -17,11 +27,20 @@ const Header: FC = () => {
                             <a className="nav-link active" aria-current="page" href="#">Home</a>
                         </li>
                     </Link>
-                    <Link passHref={true} href='/sign-in'>
-                        <li className="nav-item">
-                            <a className="nav-link" href="#">Sign In</a>
-                        </li>
-                    </Link>
+                    {!user && (
+                        <Link passHref={true} href='/sign-in'>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">Sign In</a>
+                            </li>
+                        </Link>
+                    )}
+                    {user && (
+                        <Link passHref={true} href='/settings'>
+                            <li className="nav-item">
+                                <a className="nav-link" href="#">My Settings</a>
+                            </li>
+                        </Link>
+                    )}
                 </ul>
             </div>
         </div>
