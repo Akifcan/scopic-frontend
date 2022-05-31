@@ -45,9 +45,7 @@ const Pagination: FC<PaginationProps> = ({ currentPage, max, totalPage, onPageCh
         onPageChange(currentPage + 1)
     }
 
-    return <nav aria-label="Page navigation example">
-        {JSON.stringify(prev)} <br />
-        {JSON.stringify(next)}
+    return <nav aria-label={`Change page. Current Page Is: ${currentPage}. Total page is ${totalPage}`}>
         <ul className="pagination">
             <li onClick={prevPage} className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}><a className="page-link" href="#">Previous</a></li>
             {prev.map(item => {
