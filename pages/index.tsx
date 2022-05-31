@@ -1,11 +1,14 @@
-import type { NextPage } from 'next'
+import { FC, useState } from 'react'
+import Container from '@/components/common/Container'
+import Pagination from '@/components/common/Pagination'
 
-const Home: NextPage = () => {
-  return (
-    <div className='container'>
-      ok
-    </div>
-  )
+const Home: FC = () => {
+
+  const [currentPage, setCurrentPage] = useState(6)
+
+  return <Container>
+    <Pagination currentPage={currentPage} onPageChange={(page) => setCurrentPage(page)} max={5} totalPage={50} />
+  </Container>
 }
 
 export default Home
