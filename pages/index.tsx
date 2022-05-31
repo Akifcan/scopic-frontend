@@ -2,15 +2,18 @@ import { FC, useState } from 'react'
 import Container from '@/components/common/Container'
 import Pagination from '@/components/common/Pagination'
 import ProductCard from '@/components/product/ProductCard'
-import SearchBar from '@/components/product/SearchBar'
+import SearchBar, { SortType } from '@/components/product/SearchBar'
 
 const Home: FC = () => {
 
   const [currentPage, setCurrentPage] = useState(6)
 
+  const onSearch = (keyword: string) => {
+    console.log(keyword);
+  }
 
   return <Container>
-    <SearchBar />
+    <SearchBar onSearch={onSearch} />
     <main className='row' style={{ rowGap: "1rem" }}>
       <div className='col-md-3'>
         <ProductCard />
