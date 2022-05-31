@@ -76,7 +76,7 @@ const useProvideAuth = () => {
     const saveUser = (user: SignInProps): User | undefined => {
         const currentUser = users.find(x => x.email === user.email && x.password === user.password)
         if (currentUser) {
-            localStorage.setItem('user', JSON.stringify(user))
+            localStorage.setItem('user', JSON.stringify(currentUser))
             setUser(currentUser)
             router.push('/')
         }
@@ -92,6 +92,8 @@ const useProvideAuth = () => {
     const autoLogin = () => {
         if (localStorage.getItem('user')) {
             const user = JSON.parse(localStorage.getItem('user')!)
+            console.log(user);
+
             setUser(user)
         }
     }
