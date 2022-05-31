@@ -1,15 +1,33 @@
 import { FC, ReactNode } from 'react'
 import Header from './Header'
-import { AuthProvider } from '@/hooks/useAuth'
+import Link from 'next/link'
 
-interface ContainerProps {
-    children: ReactNode
+interface BreadcrumbProps {
+    label: string,
+    href?: string
 }
 
-const Container: FC<ContainerProps> = ({ children }) => {
+interface ContainerProps {
+    children: ReactNode,
+    navigation?: BreadcrumbProps[]
+}
+
+const Container: FC<ContainerProps> = ({ children, navigation }) => {
 
     return <>
         <Header />
+        {navigation && (
+            <nav aria-label="breadcrumb">
+                <ol className="breadcrumb bg-white p-2 container">
+                    {navigation.map((item, index) => {
+                        return item.href ?
+                            <Link passHref={true} href={item.href}><li key={index} className="breadcrumb-item"><a href="#">{item.label}</a></li></Link>
+                            :
+                            <li className="breadcrumb-item active" aria-current="page">{item.label}</li>
+                    })}
+                </ol>
+            </nav>
+        )}
         <div className='body py-2'>
             <div className='container'>
                 {children}
