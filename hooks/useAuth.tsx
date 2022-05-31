@@ -92,8 +92,6 @@ const useProvideAuth = () => {
     const autoLogin = () => {
         if (localStorage.getItem('user')) {
             const user = JSON.parse(localStorage.getItem('user')!)
-            console.log(user);
-
             setUser(user)
         }
     }
