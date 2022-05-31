@@ -2,6 +2,7 @@ import { FC, useState } from 'react'
 import Container from '@/components/common/Container'
 import Pagination from '@/components/common/Pagination'
 import ProductCard from '@/components/product/ProductCard'
+import SearchBar from '@/components/product/SearchBar'
 
 const Home: FC = () => {
 
@@ -9,8 +10,33 @@ const Home: FC = () => {
 
 
   return <Container>
-    <ProductCard /> <br />
-    <Pagination currentPage={currentPage} onPageChange={(page) => setCurrentPage(page)} max={5} totalPage={50} />
+    <SearchBar />
+    <main className='row' style={{ rowGap: "1rem" }}>
+      <div className='col-md-3'>
+        <ProductCard />
+      </div>
+      <div className='col-md-3'>
+        <ProductCard />
+      </div>
+      <div className='col-md-3'>
+        <ProductCard />
+      </div>
+      <div className='col-md-3'>
+        <ProductCard />
+      </div>
+      <div className='col-md-3'>
+        <ProductCard />
+      </div>
+      <div className='col-md-3'>
+        <ProductCard />
+      </div>
+      <div className='col-md-3'>
+        <ProductCard />
+      </div>
+    </main>
+    <div className='d-flex align-items-center justify-content-center my-5'>
+      <Pagination currentPage={currentPage} onPageChange={(page) => setCurrentPage(page)} max={5} totalPage={50} />
+    </div>
   </Container>
 }
 
