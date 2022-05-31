@@ -8,7 +8,7 @@ interface ContainerProps {
 const Container: FC<ContainerProps> = ({ children }) => {
     return <>
         <Header />
-        <div className='body py-5'>
+        <div className='body py-2'>
             <div className='container'>
                 {children}
             </div>
