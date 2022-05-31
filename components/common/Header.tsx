@@ -36,6 +36,13 @@ const Header: FC = () => {
                                     <a className="nav-link" href="#">My Settings</a>
                                 </li>
                             </Link>
+                            {user.role === 'admin' && (
+                                <Link passHref={true} href='/dashboard'>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="#">Management</a>
+                                    </li>
+                                </Link>
+                            )}
                         </>
                     )}
                 </ul>
