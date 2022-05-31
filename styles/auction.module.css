@@ -1,0 +1,4 @@
+.logs {
+    max-height: 342px;
+    overflow-y: auto;
+}

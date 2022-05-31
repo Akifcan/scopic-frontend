@@ -3,10 +3,13 @@ import { FC } from 'react'
 import styles from '@/styles/product.module.css'
 import { RiAuctionLine } from 'react-icons/ri'
 
+interface ProductCardProps {
+    height?: number
+}
 
-const ProductCard: FC = () => {
+const ProductCard: FC<ProductCardProps> = ({ height = 200 }) => {
     return <div aria-label='Product Card' className={`${styles.product} shadow  bg-body rounded`}>
-        <div className={styles.image}>
+        <div className={styles.image} style={{ height }}>
             <img src='https://images.unsplash.com/photo-1518893883800-45cd0954574b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=434&q=80' alt='img' />
         </div>
         <div className={`p-2`}>

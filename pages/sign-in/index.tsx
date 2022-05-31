@@ -4,11 +4,11 @@ import styles from '@/styles/signin.module.css'
 import { RiLockPasswordLine } from 'react-icons/ri'
 import Validation, { FormProps } from '@/helpers/validation'
 import FormGroup from '@/components/common/FormGroup'
-import { AuthProvider, useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
 
 const SignIn: FC = () => {
 
-    const { user, saveUser } = useAuth()
+    const { saveUser } = useAuth()
 
     const [validation, setValidation] = useState<Validation>()
 
