@@ -1,5 +1,6 @@
-import { FC, useState, useEffect, useContext, createContext, ReactNode } from 'react';
+import { FC, useState, useEffect, useContext, createContext, ReactNode, useRef } from 'react';
 import { useRouter } from 'next/router'
+import { io, Socket } from "socket.io-client"
 
 type Role = 'user' | 'admin'
 
@@ -64,7 +65,8 @@ interface ContextProps {
     user?: User,
     saveUser?: (user: SignInProps) => User | undefined,
     logout?: () => void,
-    updateUser?: (user: User) => void
+    updateUser?: (user: User) => void,
+    socket?: Socket
 }
 
 const authContext = createContext<ContextProps>({})
@@ -78,6 +80,7 @@ const useProvideAuth = () => {
     const router = useRouter()
 
     const [user, setUser] = useState<User>()
+    const socket = useRef<Socket>()
 
 
     const saveUser = (user: SignInProps): User | undefined => {
@@ -110,9 +113,10 @@ const useProvideAuth = () => {
 
     useEffect(() => {
         autoLogin()
+        socket.current = io(process.env.NEXT_PUBLIC_API_HOST!)
     }, [])
 
-    return { user, saveUser, logout, updateUser }
+    return { user, saveUser, logout, updateUser, socket: socket.current }
 }
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {

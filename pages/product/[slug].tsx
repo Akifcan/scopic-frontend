@@ -8,7 +8,6 @@ import '@/helpers/prototypes'
 import { BsFillTrashFill } from 'react-icons/bs';
 import { useAuth } from '@/hooks/useAuth'
 import CountdownCard from '@/components/product/CountdownCard'
-import { io, Socket } from "socket.io-client"
 import { RiVoiceprintFill } from 'react-icons/ri'
 
 const ProductDetail: FC = () => {
@@ -21,7 +20,6 @@ const ProductDetail: FC = () => {
 
     const audioRef = useRef<HTMLAudioElement>(null)
     const buttonRef = useRef<HTMLButtonElement>(null)
-    const socket = useRef<Socket>()
     const id = useId()
 
     const [countdown, setCountdown] = useState<{
@@ -31,13 +29,13 @@ const ProductDetail: FC = () => {
         second: number
     }>()
 
-    const { user } = useAuth()
+    const { user, socket } = useAuth()
 
     const handleSocket = (roomId: number) => {
-        socket.current = io(process.env.NEXT_PUBLIC_API_HOST!)
-        socket.current.emit('join', roomId)
+        if (!socket) return
+        socket.emit('join', roomId)
 
-        socket.current.on('newBid', (data: AuctionProps) => {
+        socket.on('newBid', (data: AuctionProps) => {
             setAuction(prev => [data, ...prev])
             buttonRef.current?.click()
         })
@@ -46,6 +44,7 @@ const ProductDetail: FC = () => {
     useEffect(() => {
         if (!product) return
         handleSocket(product!.id)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [product, router.asPath])
 
     useEffect(() => {
@@ -71,7 +70,7 @@ const ProductDetail: FC = () => {
 
     const onOfferMade = (auction: AuctionProps) => {
         setAuction(prev => [auction, ...prev])
-        socket.current?.emit('bid', auction)
+        socket?.emit('bid', auction)
     }
 
     const loadProductDetails = () => {
