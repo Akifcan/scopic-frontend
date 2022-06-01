@@ -1,14 +1,28 @@
-import { FC, useEffect } from 'react'
+import { FC, useEffect, useState } from 'react'
 
 /* eslint-disable @next/next/no-img-element */
 import Container from '@/components/common/Container'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/router'
+import { ProductProps } from '@/helpers/prototypes'
+import Link from 'next/link'
+import '@/helpers/prototypes'
 
 const Dashboard: FC = () => {
 
+    const [products, setProducts] = useState<ProductProps[]>([])
+
     const { user } = useAuth()
     const router = useRouter()
+
+    useEffect(() => {
+        if (!user) return
+        fetch("/product/admin".apiRequest(), { headers: { "role": user.role } })
+            .then(res => res.json())
+            .then((data: ProductProps[]) => {
+                setProducts(data)
+            })
+    }, [user])
 
     useEffect(() => {
         if (!user) {
@@ -21,8 +35,8 @@ const Dashboard: FC = () => {
     }, [user])
 
     return <Container navigation={[{ label: 'Home', href: '/' }, { label: 'Management' }]}>
-        {user && user.role === 'admin' && (
-            <table className="bg-white table table-striped">
+        {user && user.role === 'admin' && products && (
+            <table className="bg-white table table-striped overflow-scroll">
                 <thead>
                     <tr>
                         <th scope="col">#</th>
@@ -33,13 +47,15 @@ const Dashboard: FC = () => {
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <th><img width={'50'} height='50' className='img-fluid' src='https://images.unsplash.com/photo-1518893883800-45cd0954574b?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=434&q=80' alt='image' /></th>
-                        <td>Mark</td>
-                        <td><h5><span className="badge bg-primary">Not start yet</span></h5></td>
-                        <td><button className='btn btn-primary'>Go to Details</button></td>
-                    </tr>
+                    {products.map((product, index) => {
+                        return <tr key={product.id}>
+                            <th scope="row">{index}</th>
+                            <th><img width={'50'} height='50' className='img-fluid' src={product.imageUrl} alt={product.name} /></th>
+                            <td>Mark</td>
+                            <td><h5><span className="badge bg-primary text-uppercase">{product.status}</span></h5></td>
+                            <td><Link passHref={true} href={`/product/${product.id}`}><button className='btn btn-primary'>Go to Details</button></Link></td>
+                        </tr>
+                    })}
                 </tbody>
             </table>
         )}

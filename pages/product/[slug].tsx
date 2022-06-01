@@ -8,7 +8,6 @@ import '@/helpers/prototypes'
 import { BsFillTrashFill } from 'react-icons/bs';
 import { useAuth } from '@/hooks/useAuth'
 
-
 const ProductDetail: FC = () => {
 
     const router = useRouter()
@@ -37,6 +36,15 @@ const ProductDetail: FC = () => {
             })
     }
 
+    const deleteProduct = async () => {
+        if (!product) return
+        if (!user) return
+        const response = await fetch(`/product/${product.id}`.apiRequest(), { method: 'DELETE', headers: { 'role': user.role } })
+        if (response.status === 200) {
+            router.push('/')
+        }
+    }
+
     useEffect(() => {
         if (!router.query.slug) return
         loadProductDetails()
@@ -62,7 +70,7 @@ const ProductDetail: FC = () => {
                                         </div>
                                         <div className="modal-footer">
                                             <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">No, back</button>
-                                            <button type="button" className="btn btn-primary">Yes. Save changes</button>
+                                            <button onClick={deleteProduct} type="button" data-bs-dismiss="modal" className="btn btn-primary">Yes. Save changes</button>
                                         </div>
                                     </div>
                                 </div>
