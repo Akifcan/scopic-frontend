@@ -3,7 +3,7 @@ import { AiOutlineSearch } from 'react-icons/ai'
 import styles from '@/styles/searchBar.module.css'
 import debounce from '@/hooks/debounce'
 
-export type SortType = 'higher' | 'lower' | ' '
+export type SortType = 'ASC' | 'DESC' | ''
 
 interface SearchBarProps {
     onSearch: (keyword: string, sort: SortType) => void
@@ -14,8 +14,7 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
     const [search, setSearch] = useState('')
 
     useEffect(() => {
-        if (search.trim().length === 0) return
-        debounce(() => onSearch(search, ' '))
+        debounce(() => onSearch(search, ''))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [search])
 
@@ -30,10 +29,10 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
             aria-label="Search Product"
             aria-describedby="search-product" />
         <span className="input-group-text" id="basic-addon2">
-            <select className={styles.sort}>
-                <option>Sort by price</option>
-                <option>Higher</option>
-                <option>Lower</option>
+            <select className={styles.sort} onChange={(e) => onSearch(search, e.target.value as SortType)}>
+                <option value={'ASC'}>Sort by price</option>
+                <option value={'DESC'}>Higher</option>
+                <option value={'ASC'}>Lower</option>
             </select>
         </span>
 

@@ -14,45 +14,49 @@ const Home: FC = () => {
   const { mutate } = useSWRConfig()
 
   const [currentPage, setCurrentPage] = useState(1)
-  const [totalPage, setTotalPage] = useState<number>()
+  const [totalPage, setTotalPage] = useState<number>(1)
+  const [products, setProducts] = useState<ProductProps[]>()
 
+  const [sort, setSort] = useState<SortType>("ASC")
+  const [keyword, setKeyword] = useState("")
 
-  const { data } = useSWR<PaginationProps<ProductProps[]>>(`/product?page=${currentPage}`.apiRequest(), fetcher)
+  useEffect(() => {
+    fetch(`/product?keyword=${keyword}&sort=${sort}&page=${currentPage}`.apiRequest())
+      .then(res => res.json())
+      .then((data: PaginationProps<ProductProps[]>) => {
+        setProducts(data.data)
+        setTotalPage(data.total)
+      })
+  }, [currentPage, sort, keyword])
 
 
   useEffect(() => {
-    if (!data) return
-    if (!totalPage) {
-      setTotalPage(data.total)
-    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data])
+  }, [products])
 
-  const onSearch = (keyword: string) => {
-    console.log(keyword);
+  const onSearch = (keyword: string, sort: SortType) => {
+    setCurrentPage(1)
+    setKeyword(keyword)
+    setSort(sort)
   }
 
   return <Container>
     <SearchBar onSearch={onSearch} />
-    {data && (
-      <>
-        <main className='row' style={{ rowGap: "1rem" }}>
-          {data.data.map(item => {
-            return <div key={item.id} className='col-md-3'>
-              <ProductCard product={item} />
-            </div>
-          })}
-        </main>
-        {totalPage && (
-          <div className='d-flex align-items-center justify-content-center my-5'>
-            <Pagination currentPage={currentPage} onPageChange={(page) => {
-              setCurrentPage(page)
-              mutate(`/product?page=${currentPage}`.apiRequest());
-            }} max={5} totalPage={totalPage + 1} />
+    {products && (
+      <main className='row' style={{ rowGap: "1rem" }}>
+        {products.map(item => {
+          return <div key={item.id} className='col-md-3'>
+            <ProductCard product={item} />
           </div>
-        )}
-      </>
+        })}
+      </main>
     )}
+    <div className='d-flex align-items-center justify-content-center my-5'>
+      <Pagination currentPage={currentPage} onPageChange={(page) => {
+        setCurrentPage(page)
+      }} max={5} totalPage={totalPage} />
+    </div>
+
   </Container>
 }
 

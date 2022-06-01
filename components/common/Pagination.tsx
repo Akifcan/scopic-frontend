@@ -18,9 +18,10 @@ const Pagination: FC<PaginationProps> = ({ currentPage, max, totalPage, onPageCh
         const prevArray = []
 
         const totalPageArray = Array.from({ length: totalPage }, (_, i) => i)
-        for (let i = 1; i < max; i++) {
+
+        for (let i = 0; i < max; i++) {
             if (totalPageArray[currentPage + i]) {
-                nextArray.push(totalPageArray[currentPage + i - 1]);
+                nextArray.push(totalPageArray[currentPage + i]);
             }
         }
         for (let i = 1; i < max; i++) {
