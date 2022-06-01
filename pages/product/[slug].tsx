@@ -5,12 +5,17 @@ import AuctionLog from '@/components/product/AuctionLog'
 import { useRouter } from 'next/router'
 import { AuctionProps, ProductProps } from '@/helpers/prototypes'
 import '@/helpers/prototypes'
+import { BsFillTrashFill } from 'react-icons/bs';
+import { useAuth } from '@/hooks/useAuth'
+
 
 const ProductDetail: FC = () => {
 
     const router = useRouter()
     const [product, setProduct] = useState<ProductProps>()
     const [auction, setAuction] = useState<AuctionProps[]>([])
+    const { user } = useAuth()
+
 
     const onOfferMade = (auction: AuctionProps) => {
         setAuction(prev => [...prev, auction])
@@ -43,6 +48,13 @@ const ProductDetail: FC = () => {
         {product && auction && (
             <div className='row'>
                 <div className='col-md-6'>
+                    {user?.role === 'admin' && (
+                        <>
+                            <button className='btn btn-danger mb-2'>
+                                <BsFillTrashFill />
+                            </button>
+                        </>
+                    )}
                     <ProductCard product={product} height={500} />
                 </div>
                 <div className='col-md-6'>
