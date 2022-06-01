@@ -1,12 +1,19 @@
 import { FC, useState, useEffect } from 'react'
 import Container from '@/components/common/Container'
 import { MdApproval } from 'react-icons/md'
+import { useAuth } from '@/hooks/useAuth'
 
 const Settings: FC = () => {
 
     // Formula: 400 + (400 * 10) / 100
 
     const [autoBidAmount, setAutoBidAmount] = useState(0)
+    const { user, updateUser } = useAuth()
+
+    useEffect(() => {
+        if (!user) return
+        setAutoBidAmount(user.autoBidAmount)
+    }, [user])
 
     const [currentAlertMessage, setCurrentAlertMessage] = useState<string>()
 
@@ -30,6 +37,7 @@ const Settings: FC = () => {
     }, [currentAlertMessage])
 
     const changeAutoBidAmount = () => {
+        updateUser!({ ...user!, autoBidAmount })
         setCurrentAlertMessage('Your automatic bid approved')
     }
 
