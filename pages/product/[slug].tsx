@@ -6,12 +6,15 @@ import { useRouter } from 'next/router'
 import { AuctionProps, ProductProps } from '@/helpers/prototypes'
 import '@/helpers/prototypes'
 
-
 const ProductDetail: FC = () => {
 
     const router = useRouter()
     const [product, setProduct] = useState<ProductProps>()
-    const [auction, setAuction] = useState<AuctionProps[]>()
+    const [auction, setAuction] = useState<AuctionProps[]>([])
+
+    const onOfferMade = (auction: AuctionProps) => {
+        setAuction(prev => [...prev, auction])
+    }
 
     const loadProductDetails = () => {
         fetch(`/product/${router.query.slug}`.apiRequest())
@@ -50,7 +53,7 @@ const ProductDetail: FC = () => {
                         <p>Start Date: <time className='fw-bold'>{new Date(product.startDate).toLocaleString()}</time></p>
                         <p>End Date: <time className='fw-bold'>{new Date(product.endDate).toLocaleString()}</time></p>
                     </div>
-                    <AuctionLog status={product.status} auction={auction} />
+                    <AuctionLog onOfferMade={onOfferMade} productId={product.id} status={product.status} auction={auction} />
                 </div>
             </div>
         )}
