@@ -1,12 +1,17 @@
-import { FC, useState } from 'react'
+import { FC, useState, useEffect } from 'react'
 import Container from '@/components/common/Container'
 import Pagination from '@/components/common/Pagination'
 import ProductCard from '@/components/product/ProductCard'
 import SearchBar, { SortType } from '@/components/product/SearchBar'
+import '@/helpers/prototypes'
 
 const Home: FC = () => {
 
   const [currentPage, setCurrentPage] = useState(6)
+
+  useEffect(() => {
+    console.log("/product?page=2".apiRequest())
+  }, [])
 
   const onSearch = (keyword: string) => {
     console.log(keyword);

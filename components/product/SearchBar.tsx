@@ -31,7 +31,7 @@ const SearchBar: FC<SearchBarProps> = ({ onSearch }) => {
             aria-describedby="search-product" />
         <span className="input-group-text" id="basic-addon2">
             <select className={styles.sort}>
-                <option selected disabled>Sort by price</option>
+                <option>Sort by price</option>
                 <option>Higher</option>
                 <option>Lower</option>
             </select>

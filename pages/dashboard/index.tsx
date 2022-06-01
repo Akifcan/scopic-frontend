@@ -5,7 +5,7 @@ import Container from '@/components/common/Container'
 import { useAuth } from '@/hooks/useAuth'
 import { useRouter } from 'next/router'
 
-const Dashboard = () => {
+const Dashboard: FC = () => {
 
     const { user } = useAuth()
     const router = useRouter()
