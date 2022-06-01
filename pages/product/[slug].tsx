@@ -17,7 +17,7 @@ const ProductDetail: FC = () => {
     const [product, setProduct] = useState<ProductProps>()
     const [auction, setAuction] = useState<AuctionProps[]>([])
     const [notificationActive, setNotificationActive] = useState(false)
-    const [isInteracted, setInteracted] = useState(false)
+    const [isAutoBidEnable, setAutobidEnable] = useState(false)
 
     const audioRef = useRef<HTMLAudioElement>(null)
     const buttonRef = useRef<HTMLButtonElement>(null)
@@ -154,6 +154,11 @@ const ProductDetail: FC = () => {
                         <RiVoiceprintFill /> &nbsp;
                         {notificationActive ? "Close" : "Open"} Notification Sound
                     </button>
+                    {isAutoBidEnable && (
+                        <div className="alert alert-primary my-4" role="alert">
+                            Auto Bid Active
+                        </div>
+                    )}
                     {countdown && product.status === 'active' && (
                         <div className='d-flex my-3 flex-wrap' style={{ gap: "1rem" }}>
                             <CountdownCard duration={countdown.day} label='day' />
@@ -163,10 +168,20 @@ const ProductDetail: FC = () => {
                         </div>
                     )}
                     <AuctionLog onOfferMade={onOfferMade} productId={product.id} status={product.status} auction={auction} />
+                    <div className="form-check bg-white px-5 py-3">
+                        <input
+                            onChange={(e) => {
+                                setAutobidEnable(e.target.checked)
+                            }}
+                            className="form-check-input" type="checkbox" value="" id="enableAutoBid" />
+                        <label className="form-check-label" htmlFor="enableAutoBid">
+                            Enable Auto Bid <b>{user?.autoBidAmount}%</b>
+                        </label>
+                    </div>
                 </div>
             </div>
         )}
-    </Container>
+    </Container >
 }
 
 export default ProductDetail
