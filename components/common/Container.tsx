@@ -21,9 +21,9 @@ const Container: FC<ContainerProps> = ({ children, navigation }) => {
                 <ol className="breadcrumb bg-white p-2 container">
                     {navigation.map((item, index) => {
                         return item.href ?
-                            <Link passHref={true} href={item.href}><li key={index} className="breadcrumb-item"><a href="#">{item.label}</a></li></Link>
+                            <Link key={index} passHref={true} href={item.href}><li className="breadcrumb-item"><a href="#">{item.label}</a></li></Link>
                             :
-                            <li className="breadcrumb-item active" aria-current="page">{item.label}</li>
+                            <li key={index} className="breadcrumb-item active" aria-current="page">{item.label}</li>
                     })}
                 </ol>
             </nav>

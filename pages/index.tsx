@@ -4,14 +4,11 @@ import Pagination from '@/components/common/Pagination'
 import ProductCard from '@/components/product/ProductCard'
 import SearchBar, { SortType } from '@/components/product/SearchBar'
 import '@/helpers/prototypes'
-import useSWR, { useSWRConfig } from 'swr'
-import fetcher from '@/helpers/fetcher'
 import { PaginationProps, ProductProps } from '@/helpers/prototypes'
 
 
 const Home: FC = () => {
 
-  const { mutate } = useSWRConfig()
 
   const [currentPage, setCurrentPage] = useState(1)
   const [totalPage, setTotalPage] = useState<number>(1)

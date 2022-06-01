@@ -1,15 +1,23 @@
-import { FC } from 'react'
-import Avatar from '@/components/common/Avatar'
+import { FC, useEffect } from 'react'
 import Container from '@/components/common/Container'
 import ProductCard from '@/components/product/ProductCard'
-import { RiAuctionLine } from 'react-icons/ri'
 import AuctionLog from '@/components/product/AuctionLog'
+import { useRouter } from 'next/router'
 
 const ProductDetail: FC = () => {
+
+    const router = useRouter()
+
+    useEffect(() => {
+        if (!router.query.slug) return
+        console.log(router.query.slug);
+
+    }, [router])
+
     return <Container navigation={[{ label: 'Home', href: '/' }, { label: 'Product Name' }]}>
         <div className='row'>
             <div className='col-md-6'>
-                <ProductCard height={500} />
+                {/* <ProductCard height={500} /> */}
             </div>
             <div className='col-md-6'>
                 <div className="alert alert-primary" role="alert">
