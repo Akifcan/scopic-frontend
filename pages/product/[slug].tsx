@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react'
+import { FC, useEffect, useState, useRef, useId } from 'react'
 import Container from '@/components/common/Container'
 import ProductCard from '@/components/product/ProductCard'
 import AuctionLog from '@/components/product/AuctionLog'
@@ -8,12 +8,22 @@ import '@/helpers/prototypes'
 import { BsFillTrashFill } from 'react-icons/bs';
 import { useAuth } from '@/hooks/useAuth'
 import CountdownCard from '@/components/product/CountdownCard'
+import { io, Socket } from "socket.io-client"
+import { RiVoiceprintFill } from 'react-icons/ri'
 
 const ProductDetail: FC = () => {
 
     const router = useRouter()
     const [product, setProduct] = useState<ProductProps>()
     const [auction, setAuction] = useState<AuctionProps[]>([])
+    const [notificationActive, setNotificationActive] = useState(false)
+    const [isInteracted, setInteracted] = useState(false)
+
+    const audioRef = useRef<HTMLAudioElement>(null)
+    const buttonRef = useRef<HTMLButtonElement>(null)
+    const socket = useRef<Socket>()
+    const id = useId()
+
     const [countdown, setCountdown] = useState<{
         day: number,
         hour: number,
@@ -22,6 +32,21 @@ const ProductDetail: FC = () => {
     }>()
 
     const { user } = useAuth()
+
+    const handleSocket = (roomId: number) => {
+        socket.current = io(process.env.NEXT_PUBLIC_API_HOST!)
+        socket.current.emit('join', roomId)
+
+        socket.current.on('newBid', (data: AuctionProps) => {
+            setAuction(prev => [data, ...prev])
+            buttonRef.current?.click()
+        })
+    }
+
+    useEffect(() => {
+        if (!product) return
+        handleSocket(product!.id)
+    }, [product, router.asPath])
 
     useEffect(() => {
         if (!product) return
@@ -45,7 +70,8 @@ const ProductDetail: FC = () => {
     }, [product])
 
     const onOfferMade = (auction: AuctionProps) => {
-        setAuction(prev => [...prev, auction])
+        setAuction(prev => [auction, ...prev])
+        socket.current?.emit('bid', auction)
     }
 
     const loadProductDetails = () => {
@@ -83,6 +109,7 @@ const ProductDetail: FC = () => {
     return <Container navigation={[{ label: 'Home', href: '/' }, { label: product ? product.name : 'Loading' }]}>
         {product && auction && (
             <div className='row'>
+                <audio key={id} src='/notification.mp3' controls ref={audioRef} hidden />
                 <div className='col-md-6'>
                     {user?.role === 'admin' && (
                         <>
@@ -118,6 +145,15 @@ const ProductDetail: FC = () => {
                         <p>Start Date: <time className='fw-bold'>{new Date(product.startDate).toLocaleString()}</time></p>
                         <p>End Date: <time className='fw-bold'>{new Date(product.endDate).toLocaleString()}</time></p>
                     </div>
+                    <button className='btn btn-primary text-white' ref={buttonRef} onClick={(e) => {
+                        if (e.isTrusted) {
+                            setNotificationActive(prev => !prev)
+                        }
+                        audioRef.current?.play()
+                    }}>
+                        <RiVoiceprintFill /> &nbsp;
+                        {notificationActive ? "Close" : "Open"} Notification Sound
+                    </button>
                     {countdown && product.status === 'active' && (
                         <div className='d-flex my-3 flex-wrap' style={{ gap: "1rem" }}>
                             <CountdownCard duration={countdown.day} label='day' />

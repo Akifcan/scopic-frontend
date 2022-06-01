@@ -45,8 +45,8 @@ const AuctionLog: FC<AuctionLogProps> = ({ auction, status, productId, onOfferMa
     return <fieldset className='bg-white p-2 pb-0 bg-light rounded'>
         <legend className='fw-bold'>Bid Logs</legend>
         <ul className={`list-group ${styles.logs}`}>
-            {auction.map(item => {
-                return <li key={item.id} className='text-capitalize list-group-item d-flex align-items-center'><Avatar src={item.avatarSrc} alt={item.name} /> {item.name} bids - <b>{item.bid}$</b> - <time><TimeAgo
+            {auction.map((item, index) => {
+                return <li key={index} className='text-capitalize list-group-item d-flex align-items-center'><Avatar src={item.avatarSrc} alt={item.name} /> {item.name} bids - <b>{item.bid}$</b> - <time><TimeAgo
                     datetime={item.createdAt}
                 /></time> </li>
             })}
