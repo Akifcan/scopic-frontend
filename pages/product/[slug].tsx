@@ -7,14 +7,42 @@ import { AuctionProps, ProductProps } from '@/helpers/prototypes'
 import '@/helpers/prototypes'
 import { BsFillTrashFill } from 'react-icons/bs';
 import { useAuth } from '@/hooks/useAuth'
+import CountdownCard from '@/components/product/CountdownCard'
 
 const ProductDetail: FC = () => {
 
     const router = useRouter()
     const [product, setProduct] = useState<ProductProps>()
     const [auction, setAuction] = useState<AuctionProps[]>([])
+    const [countdown, setCountdown] = useState<{
+        day: number,
+        hour: number,
+        minute: number,
+        second: number
+    }>()
+
     const { user } = useAuth()
 
+    useEffect(() => {
+        if (!product) return
+        const interval = setInterval(() => {
+            const now = new Date().getTime()
+            const endDate = new Date(product.endDate).getTime()
+            const distance = endDate - now
+            if (distance === 0) {
+                setProduct({ ...product, status: 'end' })
+                setCountdown(undefined)
+                clearInterval(interval)
+                return
+            }
+            setCountdown({
+                day: Math.floor(distance / (1000 * 60 * 60 * 24)),
+                hour: Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
+                minute: Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)),
+                second: Math.floor((distance % (1000 * 60)) / 1000)
+            })
+        }, 1000)
+    }, [product])
 
     const onOfferMade = (auction: AuctionProps) => {
         setAuction(prev => [...prev, auction])
@@ -90,6 +118,14 @@ const ProductDetail: FC = () => {
                         <p>Start Date: <time className='fw-bold'>{new Date(product.startDate).toLocaleString()}</time></p>
                         <p>End Date: <time className='fw-bold'>{new Date(product.endDate).toLocaleString()}</time></p>
                     </div>
+                    {countdown && product.status === 'active' && (
+                        <div className='d-flex my-3 flex-wrap' style={{ gap: "1rem" }}>
+                            <CountdownCard duration={countdown.day} label='day' />
+                            <CountdownCard duration={countdown.hour} label='hour' />
+                            <CountdownCard duration={countdown.minute} label='minute' />
+                            <CountdownCard duration={countdown.second} label='second' />
+                        </div>
+                    )}
                     <AuctionLog onOfferMade={onOfferMade} productId={product.id} status={product.status} auction={auction} />
                 </div>
             </div>
