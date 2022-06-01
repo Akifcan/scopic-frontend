@@ -9,12 +9,12 @@ import { BsFillTrashFill } from 'react-icons/bs';
 import { useAuth } from '@/hooks/useAuth'
 import CountdownCard from '@/components/product/CountdownCard'
 import { RiVoiceprintFill } from 'react-icons/ri'
+import Link from 'next/link'
 
 const ProductDetail: FC = () => {
 
     const router = useRouter()
     const [product, setProduct] = useState<ProductProps>()
-    const [auction, setAuction] = useState<AuctionProps[]>([])
     const [notificationActive, setNotificationActive] = useState(false)
     const [isAutoBidEnable, setAutobidEnable] = useState(false)
 
@@ -34,18 +34,13 @@ const ProductDetail: FC = () => {
     const handleSocket = (roomId: number) => {
         if (!socket) return
         socket.emit('join', roomId)
-
-        socket.on('newBid', (data: AuctionProps) => {
-            setAuction(prev => [data, ...prev])
-            buttonRef.current?.click()
-        })
     }
 
     useEffect(() => {
         if (!product) return
         handleSocket(product!.id)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [product, router.asPath])
+    }, [product, router.asPath, socket])
 
     useEffect(() => {
         if (!product) return
@@ -68,10 +63,6 @@ const ProductDetail: FC = () => {
         }, 1000)
     }, [product])
 
-    const onOfferMade = (auction: AuctionProps) => {
-        setAuction(prev => [auction, ...prev])
-        socket?.emit('bid', auction)
-    }
 
     const loadProductDetails = () => {
         fetch(`/product/${router.query.slug}`.apiRequest())
@@ -81,13 +72,6 @@ const ProductDetail: FC = () => {
             })
     }
 
-    const loadAuctionDetails = () => {
-        fetch(`/auction/${router.query.slug}`.apiRequest())
-            .then(res => res.json())
-            .then((data: AuctionProps[]) => {
-                setAuction(data)
-            })
-    }
 
     const deleteProduct = async () => {
         if (!product) return
@@ -98,15 +82,15 @@ const ProductDetail: FC = () => {
         }
     }
 
+
     useEffect(() => {
         if (!router.query.slug) return
         loadProductDetails()
-        loadAuctionDetails()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [router])
 
     return <Container navigation={[{ label: 'Home', href: '/' }, { label: product ? product.name : 'Loading' }]}>
-        {product && auction && (
+        {product && (
             <div className='row'>
                 <audio key={id} src='/notification.mp3' controls ref={audioRef} hidden />
                 <div className='col-md-6'>
@@ -166,17 +150,32 @@ const ProductDetail: FC = () => {
                             <CountdownCard duration={countdown.second} label='second' />
                         </div>
                     )}
-                    <AuctionLog onOfferMade={onOfferMade} productId={product.id} status={product.status} auction={auction} />
-                    <div className="form-check bg-white px-5 py-3">
-                        <input
-                            onChange={(e) => {
-                                setAutobidEnable(e.target.checked)
-                            }}
-                            className="form-check-input" type="checkbox" value="" id="enableAutoBid" />
-                        <label className="form-check-label" htmlFor="enableAutoBid">
-                            Enable Auto Bid <b>{user?.autoBidAmount}%</b>
-                        </label>
-                    </div>
+                    <AuctionLog
+                        onAutoBidMade={() => setAutobidEnable(false)}
+                        isAutoBidActive={isAutoBidEnable}
+                        product={product}
+                        status={product.status} />
+                    {user && (
+                        <>
+                            {user!.autoBidAmount === 0 && (
+                                <div className="alert alert-primary my-4" role="alert">
+                                    Please first set auto enable amount <Link passHref={true} href='/settings'><a href="#">here</a></Link>
+                                </div>
+                            )}
+                            <div className={`form-check bg-white px-5 py-3 ${user.autoBidAmount <= 0 ? 'opacity-50' : ''}`}>
+                                <input
+                                    checked={isAutoBidEnable}
+                                    disabled={user.autoBidAmount <= 0}
+                                    onChange={(e) => {
+                                        setAutobidEnable(e.target.checked)
+                                    }}
+                                    className="form-check-input" type="checkbox" value="" id="enableAutoBid" />
+                                <label className="form-check-label" htmlFor="enableAutoBid">
+                                    Enable Auto Bid <b>{user?.autoBidAmount}%</b>
+                                </label>
+                            </div>
+                        </>
+                    )}
                 </div>
             </div>
         )}

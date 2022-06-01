@@ -80,7 +80,7 @@ const useProvideAuth = () => {
     const router = useRouter()
 
     const [user, setUser] = useState<User>()
-    const socket = useRef<Socket>()
+    const [socket, setSocket] = useState<Socket>()
 
 
     const saveUser = (user: SignInProps): User | undefined => {
@@ -113,10 +113,10 @@ const useProvideAuth = () => {
 
     useEffect(() => {
         autoLogin()
-        socket.current = io(process.env.NEXT_PUBLIC_API_HOST!)
+        setSocket(io(process.env.NEXT_PUBLIC_API_HOST!))
     }, [])
 
-    return { user, saveUser, logout, updateUser, socket: socket.current }
+    return { user, saveUser, logout, updateUser, socket }
 }
 
 export const AuthProvider: FC<{ children: ReactNode }> = ({ children }) => {
