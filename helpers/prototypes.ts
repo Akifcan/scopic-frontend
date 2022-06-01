@@ -14,6 +14,14 @@ export interface ProductProps {
     status: 'active' | 'not-start' | 'end'
 }
 
+export interface AuctionProps {
+    id: number,
+    bid: number,
+    name: string,
+    avatarSrc: string,
+    createdAt: Date
+}
+
 String.prototype.apiRequest = function (): string {
     return process.env.NEXT_PUBLIC_API_HOST! + this
 }
