@@ -12,10 +12,11 @@ interface AuctionLogProps {
     status: 'active' | 'not-start' | 'end',
     product: ProductProps,
     isAutoBidActive: boolean,
-    onAutoBidMade: () => void
+    onAutoBidMade: () => void,
+    onBidMade: () => void
 }
 
-const AuctionLog: FC<AuctionLogProps> = ({ status, product, isAutoBidActive, onAutoBidMade }) => {
+const AuctionLog: FC<AuctionLogProps> = ({ status, product, isAutoBidActive, onAutoBidMade, onBidMade }) => {
 
     const router = useRouter()
     const { user, socket } = useAuth()
@@ -54,6 +55,8 @@ const AuctionLog: FC<AuctionLogProps> = ({ status, product, isAutoBidActive, onA
                 makeOffer(data.bid + user!.autoBidAmount)
                 onAutoBidMade()
             }
+            onBidMade()
+
 
         })
 

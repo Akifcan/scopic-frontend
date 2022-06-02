@@ -92,7 +92,7 @@ const ProductDetail: FC = () => {
     return <Container navigation={[{ label: 'Home', href: '/' }, { label: product ? product.name : 'Loading' }]}>
         {product && (
             <div className='row'>
-                <audio key={id} src='/notification.mp3' controls ref={audioRef} hidden />
+                <audio key={id} src='/notification.mp3' controls ref={audioRef} hidden muted />
                 <div className='col-md-6'>
                     {user?.role === 'admin' && (
                         <>
@@ -130,6 +130,7 @@ const ProductDetail: FC = () => {
                     </div>
                     <button className='btn btn-primary text-white' ref={buttonRef} onClick={(e) => {
                         if (e.isTrusted) {
+                            audioRef.current!.muted = !audioRef.current!.muted
                             setNotificationActive(prev => !prev)
                         }
                         audioRef.current?.play()
@@ -151,7 +152,10 @@ const ProductDetail: FC = () => {
                         </div>
                     )}
                     <AuctionLog
-                        onAutoBidMade={() => setAutobidEnable(false)}
+                        onBidMade={() => buttonRef.current?.click()}
+                        onAutoBidMade={() => {
+                            setAutobidEnable(false)
+                        }}
                         isAutoBidActive={isAutoBidEnable}
                         product={product}
                         status={product.status} />
