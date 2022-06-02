@@ -10,14 +10,19 @@
 
 
 ## Please first run backend app
-`npm run start:dev`
+### in docker folder
+- `docker compose up -d`
+### root folder
+- `npm run start:dev` 
+- `npm run test:e2e`
+
 
 ## Please run this endpoint after run backend app
+`http://localhost:3000/seeder`
 
 ## Postman collection link: [Click](https://we.tl/t-e3W45YlzKH)
 
 `http://localhost:3000/seeder`
-`npm run test:e2e`
 
 ## Endpoints
 

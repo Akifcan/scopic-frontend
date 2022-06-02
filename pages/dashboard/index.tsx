@@ -53,7 +53,7 @@ const Dashboard: FC = () => {
                             return <tr key={product.id}>
                                 <th scope="row">{index}</th>
                                 <th><img width={'50'} height='50' className='img-fluid' src={product.imageUrl} alt={product.name} /></th>
-                                <td>Mark</td>
+                                <td>{product.name}</td>
                                 <td><h5><span className="badge bg-primary text-uppercase">{product.status}</span></h5></td>
                                 <td><Link passHref={true} href={`/product/${product.id}`}><button className='btn btn-primary'>Go to Details</button></Link></td>
                             </tr>
