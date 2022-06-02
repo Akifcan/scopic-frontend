@@ -1,34 +1,113 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# This is a [Next.js](https://nextjs.org/) Scopic Task
 
-## Getting Started
+## Stacks
+ - Node.js
+ - React.js
+ - Nest.js
+ - Next.js
+ - Postgres
+ - Typeorm
 
-First, run the development server:
 
-```bash
-npm run dev
-# or
-yarn dev
+## Please first run backend app
+`npm run start:dev`
+
+## Please run this endpoint after run backend app
+
+## Postman collection link: [Click](https://we.tl/t-e3W45YlzKH)
+
+`http://localhost:3000/seeder`
+`npm run test:e2e`
+
+## Endpoints
+
+- **POST** /product
+  - This action will create new product.
+```
+{
+    "name": "wooden bike",
+    "description": "old good wooden bike",
+    "price": 200,
+    "imageUrl": "https://images.unsplash.com/photo-1458228269118-09f55da39bfa?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80",
+    "startDate": "2022-03-25 09:30",
+    "endDate": "2022-04-25 09:30"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **GET** /product?keyword=&sort=&page=1
+    - This action will list products
+- **GET** /product/3
+    - This action will list single product
+- **GET** /product/admin
+    - This action only for admin users. 
+- **DELETE** /product/3
+    - This action only for admin users. 
+- **POST** /auction
+    - This action will make bid
+    ```
+        {
+    "product": {"id": 134},
+    "bid": 15602,
+    "name": "akif Kara",
+    "avatarSrc": "https://images.unsplash.com/photo-1546539782-6fc531453083?ixlib=rb-1.2.1&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&ixid=eyJhcHBfaWQiOjE3Nzg0fQ"
+}
+    ```
+- **GET** /auction/134
+    - This action will list all bids of product.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Registered users: (this is not database)
+```
+    interface User {
+    name: string,
+    avatarSrc: string,
+    email: string,
+    role: Role,
+    password: string,
+    autoBidAmount: number
+}
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+const users: User[] = [
+    {
+        "name": "akifcan",
+        avatarSrc: "https://randomuser.me/api/portraits/men/97.jpg",
+        email: 'akfkara97@gmail.com',
+        role: 'admin',
+        password: '12345',
+        autoBidAmount: 0,
+    },
+    {
+        "name": "admin",
+        avatarSrc: "https://randomuser.me/api/portraits/men/29.jpg",
+        email: 'admin@gmail.com',
+        role: 'admin',
+        password: '12345',
+        autoBidAmount: 0,
+    },
+    {
+        "name": "john doe",
+        avatarSrc: "https://randomuser.me/api/portraits/men/32.jpg",
+        email: 'john@gmail.com',
+        role: 'user',
+        password: '12345',
+        autoBidAmount: 0,
+    },
+    {
+        "name": "lena",
+        avatarSrc: "https://images.unsplash.com/photo-1510227272981-87123e259b17?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=3759e09a5b9fbe53088b23c615b6312e",
+        email: 'lena@gmail.com',
+        role: 'user',
+        password: '12345',
+        autoBidAmount: 0,
+    },
+    {
+        "name": "alex",
+        avatarSrc: "https://randomuser.me/api/portraits/men/12.jpg",
+        email: 'alex@gmail.com',
+        role: 'user',
+        password: '12345',
+        autoBidAmount: 0,
+    },
+]
+````
