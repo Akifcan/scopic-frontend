@@ -64,12 +64,14 @@ const ProductDetail: FC = () => {
     }, [product])
 
 
-    const loadProductDetails = () => {
-        fetch(`/product/${router.query.slug}`.apiRequest())
-            .then(res => res.json())
-            .then((data: ProductProps) => {
-                setProduct(data)
-            })
+    const loadProductDetails = async () => {
+        const response = await fetch(`/product/${router.query.slug}`.apiRequest())
+        const data = await response.json()
+        if (response.status === 200) {
+            setProduct(data)
+        } else {
+            router.push('/404')
+        }
     }
 
 
