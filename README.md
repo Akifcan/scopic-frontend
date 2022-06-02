@@ -7,6 +7,8 @@
  - Next.js
  - Postgres
  - Typeorm
+ - Bootstrap
+ - Typescript
 
 
 ## Please first run backend app
@@ -21,8 +23,6 @@
 `http://localhost:3000/seeder`
 
 ## Postman collection link: [Click](https://we.tl/t-e3W45YlzKH)
-
-`http://localhost:3000/seeder`
 
 ## Endpoints
 
@@ -116,3 +116,12 @@ const users: User[] = [
     },
 ]
 ````
+
+## Frontend Routes
+ - create/index.tsx
+ - dashboard/index.tsx
+ - product/[slug].tsx
+ - settings/index.tsx
+ - sign-in/index.tsx
+ - 404.tsx
+ - index.tsx
