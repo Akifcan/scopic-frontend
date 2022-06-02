@@ -36,28 +36,31 @@ const Dashboard: FC = () => {
 
     return <Container navigation={[{ label: 'Home', href: '/' }, { label: 'Management' }]}>
         {user && user.role === 'admin' && products && (
-            <table className="bg-white table table-striped overflow-scroll">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Image</th>
-                        <th scope="col">Product Name</th>
-                        <th scope="col">Auction Status</th>
-                        <th scope="col">Details</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {products.map((product, index) => {
-                        return <tr key={product.id}>
-                            <th scope="row">{index}</th>
-                            <th><img width={'50'} height='50' className='img-fluid' src={product.imageUrl} alt={product.name} /></th>
-                            <td>Mark</td>
-                            <td><h5><span className="badge bg-primary text-uppercase">{product.status}</span></h5></td>
-                            <td><Link passHref={true} href={`/product/${product.id}`}><button className='btn btn-primary'>Go to Details</button></Link></td>
+            <>
+                <button className='btn btn-primary mb-2' onClick={() => router.push('/create')}>Create New Auction</button>
+                <table className="bg-white table table-striped overflow-scroll">
+                    <thead>
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Image</th>
+                            <th scope="col">Product Name</th>
+                            <th scope="col">Auction Status</th>
+                            <th scope="col">Details</th>
                         </tr>
-                    })}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {products.map((product, index) => {
+                            return <tr key={product.id}>
+                                <th scope="row">{index}</th>
+                                <th><img width={'50'} height='50' className='img-fluid' src={product.imageUrl} alt={product.name} /></th>
+                                <td>Mark</td>
+                                <td><h5><span className="badge bg-primary text-uppercase">{product.status}</span></h5></td>
+                                <td><Link passHref={true} href={`/product/${product.id}`}><button className='btn btn-primary'>Go to Details</button></Link></td>
+                            </tr>
+                        })}
+                    </tbody>
+                </table>
+            </>
         )}
     </Container>
 }

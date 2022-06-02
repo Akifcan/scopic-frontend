@@ -1,4 +1,4 @@
-import { FC, useState, useCallback, useEffect, FormEvent } from 'react'
+import { FC, useState, useCallback, FormEvent } from 'react'
 import Container from '@/components/common/Container'
 import styles from '@/styles/signin.module.css'
 import { RiLockPasswordLine } from 'react-icons/ri'
